@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "inc/occurence.h"
 
 void affiche_une_partie(char fichier[]){
   char lecture[100];
