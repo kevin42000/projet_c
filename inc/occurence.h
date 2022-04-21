@@ -1,5 +1,5 @@
 #ifndef DEF_OCCURENCE
-#def DEF_OCCURENCE
+#define DEF_OCCURENCE
 
 void afficher_une_partie(char fichier[]);
 
