@@ -10,6 +10,4 @@ typedef struct noeud{
   struct noeud droit;
 }noeud;
 
-typedef noeud *arbre;
-
 #endif
