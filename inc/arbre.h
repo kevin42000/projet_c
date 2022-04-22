@@ -2,9 +2,9 @@
 #define DEF_ARBRE
 
 typedef struct noeud{
-  char initial;
+  char caractere;
   int occurence;
-  int codage;
+  char codage[32];
   int nb_bits;
   struct noeud gauche;
   struct noeud droit;
