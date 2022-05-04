@@ -99,8 +99,8 @@ void creer_code(noeud *noeud_courant, noeud *retour[256], int code, int profonde
     }else{
         code *= 10;
         profondeur++;
-        creer_code(noeud_courant->droit, retour, code, profondeur);
-        code++;
         creer_code(noeud_courant->gauche, retour, code, profondeur);
+        code++;
+        creer_code(noeud_courant->droit, retour, code, profondeur);
     }
 }
