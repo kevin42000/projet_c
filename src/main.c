@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../inc/occurence.h"
 #include "../inc/arbre.h"
+#include "../inc/compression.h"
 
 int main(int argc, char *argv[]){
     int i, taille = 0/*, m = 0, n = 0*/;
@@ -34,7 +35,22 @@ int main(int argc, char *argv[]){
         printf("%c, %d, %s, %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits);
         i++;
     }
-    /*alphabet contient le codage et la profondeur. Le codage affiché commençant forcément par un 1, on peut savoir si un élément commence par 0 grâce à la profondeur. Par ex pour x, le codage est 0 et a une profondeur de 7, le code binaire est donc 0000000 et pour c le code binaire est 0000001.*/
+    printf("\n");
+    creer_fichier("exemple.huf", argv[1], alphabet);
+
+    for(i=0;i<256;i++){
+        free(alphabet[i]);
+    }
+    
+    decompression(alphabet, "exemple.huf");
+    i = 0;
+    while(alphabet[i] != NULL){
+        printf("%c, %d, %s, %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits);
+        i++;
+    }
+    printf("\n");
+
+    creation_fichier(alphabet, "exemple2.txt", "exemple.huf");
     /*if(argc == 1){
     
   }else if(argv[1] == "-c"){

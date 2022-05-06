@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <limits.h>
 #include "../inc/arbre.h"
 
@@ -81,6 +82,7 @@ int est_feuille(noeud *noeud_courant){
 
 void creer_code(noeud *noeud_courant, noeud *retour[256], int code, int profondeur){
     int i = 0;
+    char code_char[32] = {0}, tmp[32] = {0}, tmp2[32] = {0};
     if(est_feuille(noeud_courant)){
         while(retour[i] != NULL){
             i++;
@@ -92,7 +94,15 @@ void creer_code(noeud *noeud_courant, noeud *retour[256], int code, int profonde
         }
         retour[i]->caractere = noeud_courant->caractere;
         retour[i]->occurence = noeud_courant->occurence;
-        sprintf(retour[i]->codage, "%d", code);
+        sprintf(code_char, "%d", code);
+        while((int)strlen(code_char) < profondeur){
+            tmp[0] = '0';
+            tmp[1] = '\0';
+            strcat(tmp, code_char);
+            strcpy(tmp2, tmp);
+            strcpy(code_char, tmp2);
+        }
+        strcpy(retour[i]->codage, code_char);
         retour[i]->nb_bits = profondeur;
         retour[i]->gauche = NULL;
         retour[i]->droit = NULL;
