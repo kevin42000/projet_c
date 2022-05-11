@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../inc/occurence.h"
 
+/*affiche une partie du fichier texte passé en paramètre*/
 void affiche_une_partie(char *fichier){
   char lecture[10];
   FILE *p;
@@ -12,6 +13,7 @@ void affiche_une_partie(char *fichier){
   fclose(p);
 }
 
+/*affiche la totalité du fichier texte passé en paramètre*/
 void affiche_la_totalite(char *fichier){
   char caractere;
   FILE *p;
@@ -26,7 +28,8 @@ void affiche_la_totalite(char *fichier){
   fclose(p);
   printf("\n");
 }
-       
+
+/*compte les occurences des caractères du fichier*/
 void occurence(FILE *fic, int tab[256]){
   char caractere;
   do{

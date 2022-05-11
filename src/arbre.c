@@ -4,6 +4,7 @@
 #include <limits.h>
 #include "../inc/arbre.h"
 
+/*crée une structure noeud pour un caractère contenu dans le fichier*/
 noeud * creer_feuille(int *tab, int index){
     noeud *arbre_huffman;
     if(tab[index] == 0){
@@ -23,6 +24,7 @@ noeud * creer_feuille(int *tab, int index){
     return arbre_huffman;
 }
 
+/*récupère les 2 plus faibles occurences*/
 void parcours_tableau(noeud *arbre_huffman[256], int taille, int *x, int *y){
     int i = 0, j = 0;
     int x1 = INT_MAX, x2 = INT_MAX;
@@ -47,6 +49,7 @@ void parcours_tableau(noeud *arbre_huffman[256], int taille, int *x, int *y){
     }
 }
 
+/*crée une structure noeud pour chaque caractère contenu dans le fichier*/
 void creer_noeud(noeud *tab[], int taille){
     int i, m = 0, n = 0;
     int *x = &m, *y = &n;
@@ -73,6 +76,7 @@ void creer_noeud(noeud *tab[], int taille){
     }
 }
 
+/*retourne vrai si noeud_courant est une feuille*/
 int est_feuille(noeud *noeud_courant){
     if(noeud_courant->caractere != '\0'){
         return 1;
