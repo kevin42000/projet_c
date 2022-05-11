@@ -7,8 +7,8 @@
 int main(int argc, char *argv[]){
     int i, taille = 0/*, m = 0, n = 0*/;
     /*int *x = &m, *y = &n;*/
-    int tab[256] = {0};
-    noeud *arbre_huffman[256] = {0}, *alphabet[256] = {0};
+    int tab[MAX_CHAR] = {0};
+    noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *p;
 
     if(argc!=2){
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     p = fopen(argv[1], "r");
     occurence(p, tab);
     fclose(p);
-    for(i=0;i<256;i++){
+    for(i=0;i<MAX_CHAR;i++){
         arbre_huffman[taille] = creer_feuille(tab, i);
         if(arbre_huffman[taille] == NULL){
             taille--;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
     printf("\n");
     creer_fichier("exemple.huf", argv[1], alphabet);
 
-    for(i=0;i<256;i++){
+    for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
     }
     

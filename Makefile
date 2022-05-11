@@ -1,30 +1,18 @@
-CC = gcc
+NFLAGS= `pkg-config --libs-only-l MLV`
 
-FLAGS = -W -Wall -std=c89 -pedantic -O3
+CC= gcc
 
-all: huffman clean
+CFLAGS= -W -Wall -lm -std=c89 -pedantic `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV`
 
-huffman: main.o occurence.o arbre.o compression.o
-	$(CC) $(FLAGS) obj/main.o obj/occurence.o obj/arbre.o obj/compression.o -o bin/huffman
+sources= ./src/arbre.c ./src/compression.c ./src/main.c ./src/occurence.c
 
-main.o: src/main.c
-	$(CC) $(FLAGS) src/main.c -c
-	mv main.o obj/main.o
+objets= $(sources:.c=.o)
 
-occurence.o: src/occurence.c inc/occurence.h
-	$(CC) $(FLAGS) src/occurence.c -c
-	mv occurence.o obj/occurence.o
+clean : projet
+	rm -r ./*.o ./src/*.o
 
-arbre.o: src/arbre.c inc/arbre.h
-	$(CC) $(FLAGS) src/arbre.c -c
-	mv arbre.o obj/arbre.o
+projet: $(objets)
+	$(CC) $(CFLAGS) -o $@  $^ $(NFLAGS)
 
-compression.o: src/compression.c inc/compression.h
-	$(CC) $(FLAGS) src/compression.c -c
-	mv compression.o obj/compression.o
-
-clean:
-	rm -f obj/*.o
-
-cleanexe:
-	rm -f bin/huffman
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ $(NFLAGS) -c $< 

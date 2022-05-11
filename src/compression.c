@@ -69,7 +69,7 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     fclose(origine);
 }
 
-void decompression(noeud *alphabet[256], char *fichier){
+void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
     int i = 0, j, nb;
     char nb_bits[3], taille_arbre[11] = {0};
     FILE *p;
@@ -107,6 +107,6 @@ void decompression(noeud *alphabet[256], char *fichier){
     fclose(p);
 }
 
-void creation_fichier(noeud *alphabet[256], char *fichier, char *fichier_compresse){
+void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_compresse){
     
 }

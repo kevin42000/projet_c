@@ -1,5 +1,6 @@
 #ifndef DEF_ARBRE
 #define DEF_ARBRE
+#define MAX_CHAR 257
 
 typedef struct noeud{
   char caractere;
@@ -12,12 +13,12 @@ typedef struct noeud{
 
 noeud * creer_feuille(int *tab, int index);
 
-void parcours_tableau(noeud *arbre_huffman[256], int taille, int *x, int *y);
+void parcours_tableau(noeud *arbre_huffman[MAX_CHAR], int taille, int *x, int *y);
 
 void creer_noeud(noeud *tab[], int taille);
 
 int est_feuille(noeud *noeud_courant);
 
-void creer_code(noeud *noeud_courant, noeud *retour[256], int code, int profondeur);
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], int code, int profondeur);
 
 #endif

@@ -30,7 +30,7 @@ void affiche_la_totalite(char *fichier){
 }
 
 /*compte les occurences des caractères du fichier*/
-void occurence(FILE *fic, int tab[256]){
+void occurence(FILE *fic, int tab[MAX_CHAR]){
   char caractere;
   do{
     caractere = fgetc(fic);

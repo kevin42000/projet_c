@@ -7,7 +7,7 @@
 void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     int i = 0, j, k = 0, l = 1;
     unsigned char bit;
-    char caractere, tete[256] = {0}, binaire[8193] = {0};
+    char caractere, tete[MAX_CHAR] = {0}, binaire[8193] = {0};
     FILE *p, *origine;
     p = fopen(fichier, "w");
     fputc('\0', p);

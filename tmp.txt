@@ -6,3 +6,4 @@ azertyuiopqsdfghjklmwx
 azertyuiopqsdfghjklmw
 azertyuiopqsdfghjklm
 azertyuiopqsdfghjk
+0123456789./;

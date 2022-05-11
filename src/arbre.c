@@ -25,11 +25,11 @@ noeud * creer_feuille(int *tab, int index){
 }
 
 /*récupère les 2 plus faibles occurences*/
-void parcours_tableau(noeud *arbre_huffman[256], int taille, int *x, int *y){
+void parcours_tableau(noeud *arbre_huffman[MAX_CHAR], int taille, int *x, int *y){
     int i = 0, j = 0;
     int x1 = INT_MAX, x2 = INT_MAX;
-    *x = 256;
-    *y = 256;
+    *x = MAX_CHAR;
+    *y = MAX_CHAR;
     for(i=0;i<taille;i++){
         if(arbre_huffman[i] != NULL){
             if(arbre_huffman[i]->occurence < x1){
@@ -37,7 +37,7 @@ void parcours_tableau(noeud *arbre_huffman[256], int taille, int *x, int *y){
                 x1 = arbre_huffman[i]->occurence;
                 *x = i;
             }
-            if(j > 0 && j < 256 && arbre_huffman[j]->occurence < x2){
+            if(j > 0 && j < MAX_CHAR && arbre_huffman[j]->occurence < x2){
                 x2 = arbre_huffman[j]->occurence;
                 *y = j;
             }else if(j == 0 && arbre_huffman[i]->occurence < x2 && *x != i){
@@ -84,7 +84,7 @@ int est_feuille(noeud *noeud_courant){
     return 0;
 }
 
-void creer_code(noeud *noeud_courant, noeud *retour[256], int code, int profondeur){
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], int code, int profondeur){
     int i = 0;
     char code_char[32] = {0}, tmp[32] = {0}, tmp2[32] = {0};
     if(est_feuille(noeud_courant)){
