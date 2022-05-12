@@ -19,6 +19,6 @@ void creer_noeud(noeud *tab[], int taille);
 
 int est_feuille(noeud *noeud_courant);
 
-void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], int code, int profondeur);
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], int profondeur);
 
 #endif

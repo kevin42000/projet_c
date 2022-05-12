@@ -64,7 +64,6 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
         while(alphabet[i]->caractere != caractere){
             i++;
         }
-        printf("%c\n",alphabet[i]->caractere);
         bit = 0;
         for(j=0;j<alphabet[i]->nb_bits;j++){
             if(alphabet[i]->codage[j] == '1'){
@@ -73,7 +72,6 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
                 pile = empiler(pile,0);
             }
             if(taille_pile(pile) == 8){
-                printf("Ready to write\n");
                 bit = 0;
                 for(k=0;k<8;k++){
                     if((x=sommet(pile)) == 0){
@@ -81,15 +79,12 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
                     }else{
                         bit = (bit << 1) + 1;
                     }
-                    printf("%d\n",x);
                     pile = depiler(pile);
                 }
-                afficher_octet(bit);
                 fwrite(&bit,sizeof(char),1,p);
                 bit=0;
             }
         }
-        printf("Done\n");
     }while(caractere != EOF);
     if(taille_pile(pile) > 0){
             m = 8 - taille_pile(pile);

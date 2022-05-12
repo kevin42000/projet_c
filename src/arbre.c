@@ -84,9 +84,9 @@ int est_feuille(noeud *noeud_courant){
     return 0;
 }
 
-void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], int code, int profondeur){
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], int profondeur){
     int i = 0;
-    char code_char[32] = {0}, tmp[32] = {0}, tmp2[32] = {0};
+    char code_char[32] = {0}, tmp[33] = {0};
     if(est_feuille(noeud_courant)){
         while(retour[i] != NULL){
             i++;
@@ -98,23 +98,21 @@ void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], int code, int pro
         }
         retour[i]->caractere = noeud_courant->caractere;
         retour[i]->occurence = noeud_courant->occurence;
-        sprintf(code_char, "%d", code);
-        while((int)strlen(code_char) < profondeur){
-            tmp[0] = '0';
-            tmp[1] = '\0';
-            strcat(tmp, code_char);
-            strcpy(tmp2, tmp);
-            strcpy(code_char, tmp2);
-        }
-        strcpy(retour[i]->codage, code_char);
+        strcpy(retour[i]->codage, code);
         retour[i]->nb_bits = profondeur;
         retour[i]->gauche = NULL;
         retour[i]->droit = NULL;
     }else{
-        code *= 10;
+        tmp[0] = '0';
+        tmp[1] = '\0';
+        strcpy(code_char, code);
+        strcat(code_char, tmp);
         profondeur++;
-        creer_code(noeud_courant->gauche, retour, code, profondeur);
-        code++;
-        creer_code(noeud_courant->droit, retour, code, profondeur);
+        creer_code(noeud_courant->gauche, retour, code_char, profondeur);
+        tmp[0] = '1';
+        tmp[1] = '\0';
+        strcpy(code_char, code);
+        strcat(code_char, tmp);
+        creer_code(noeud_courant->droit, retour, code_char, profondeur);
     }
 }
