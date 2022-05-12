@@ -44,13 +44,12 @@ int main(int argc, char *argv[]){
     
     decompression(alphabet, "exemple.huf");
     i = 0;
-    while(alphabet[i] != NULL){
-        printf("%c, %d, %s, %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits);
+    while(i < MAX_CHAR && alphabet[i] != NULL){
+        printf("%c, %d, %s, %d, %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits,i);
         i++;
     }
     printf("\n");
-
-    creation_fichier(alphabet, "exemple2.txt", "exemple.huf");
+    /*creation_fichier(alphabet, "exemple2.txt", "exemple.huf");
     /*if(argc == 1){
     
   }else if(argv[1] == "-c"){
