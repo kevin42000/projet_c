@@ -5,7 +5,7 @@
 #include "../inc/arbre.h"
 #include "../inc/compression.h"
 #include "../inc/pile.h"
-void afficher_octet(int b){
+void afficher_octet(char b){
     int i;
     for(i=0;i<8;i++){
         printf("%d",!!((b << i) & 0x80));
@@ -18,7 +18,7 @@ void afficher_octet(int b){
     printf("\n");
 }
 void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
-    int i = 0, j, k = 0,m;
+    int i = 0, j, k = 0,m,x;
     unsigned char bit;
     char nb[11], nb_bits[11], caractere, tete[45] = {0};
     FILE *p, *origine;
@@ -67,8 +67,7 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
         printf("%c\n",alphabet[i]->caractere);
         bit = 0;
         for(j=0;j<alphabet[i]->nb_bits;j++){
-            printf("%c\n",alphabet[i]->codage[j]);
-            if(alphabet[i]->codage[j] == 1){
+            if(alphabet[i]->codage[j] == '1'){
                 pile = empiler(pile,1);
             }else{
                 pile = empiler(pile,0);
@@ -77,13 +76,15 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
                 printf("Ready to write\n");
                 bit = 0;
                 for(k=0;k<8;k++){
-                    if(sommet(pile) == 0){
+                    if((x=sommet(pile)) == 0){
                         bit <<=1;
                     }else{
                         bit = (bit << 1) + 1;
                     }
+                    printf("%d\n",x);
                     pile = depiler(pile);
                 }
+                afficher_octet(bit);
                 fwrite(&bit,sizeof(char),1,p);
                 bit=0;
             }
