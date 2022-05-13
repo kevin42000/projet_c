@@ -24,9 +24,10 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     unsigned char bit;
     char nb[11], nb_bits[11], caractere, tete[45] = {0};
     FILE *p, *origine;
-    pile pile = pile_vide(); /* pour stocker les bits */
-    
+    file f = file_vide(); /* pour stocker les bits */
+    i=0;
     while(alphabet[i] != NULL){
+        printf("%c %s %d\n",alphabet[i]->caractere,alphabet[i]->codage,alphabet[i]->nb_bits);
         i++;
     }
     p = fopen(fichier, "w");
@@ -38,17 +39,7 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     fputc(' ', p);
     
     while(alphabet[i] != NULL){
-        tete[0] = alphabet[i]->caractere;
-        tete[1] = '\0';
-        if(alphabet[i]->nb_bits > 9){
-            strcat(tete, "1\0");
-        }else{
-            strcat(tete, "0\0");
-        }
-        sprintf(nb_bits, "%d", alphabet[i]->nb_bits);
-        strcat(tete, nb_bits);
-        strcat(tete, alphabet[i]->codage);
-        fputs(tete, p);
+        fprintf(p,"%c %ld;;",alphabet[i]->caractere,alphabet[i]->occurence);
         i++;
     }
     
@@ -69,34 +60,34 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
         bit = 0;
         for(j=0;j<alphabet[i]->nb_bits;j++){
             if(alphabet[i]->codage[j] == '1'){
-                pile = empiler(pile,1);
+                f = enfiler(f,1);
             }else{
-                pile = empiler(pile,0);
+                f = enfiler(f,0);
             }
-            if(taille_pile(pile) == 8){
+            if(taille_file(f) == 8){
                 bit = 0;
                 for(k=0;k<8;k++){
-                    if((x=sommet(pile)) == 0){
+                    if((x=debut_file(f)) == 0){
                         bit <<=1;
                     }else{
                         bit = (bit << 1) + 1;
                     }
-                    pile = depiler(pile);
+                    f = defiler(f);
                 }
                 fwrite(&bit,sizeof(char),1,p);
                 bit=0;
             }
         }
     }while(caractere != EOF);
-    if(taille_pile(pile) > 0){
-            m = 8 - taille_pile(pile);
-            while(!est_pile_vide(pile)){
-                if(sommet(pile) == 0){
+    if(taille_file(f) > 0){
+            m = 8 - taille_file(f);
+            while(!est_file_vide(f)){
+                if(debut_file(f) == 0){
                         bit <<=1;
                     }else{
                         bit = (bit << 1) + 1;
                     }
-                    pile = depiler(pile);
+                    f = defiler(f);
             }
             for(j=0;j<m;j++){
                 bit <<=1;
@@ -109,61 +100,81 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
 }
 
 void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
-    int i = 0, j, nb;
-    char nb_bits[3], taille_arbre[11] = {0};
+    int i = 0, j, nb,taille = 0;
+    char nb_bits[3], taille_arbre[11] = {0},c;
+    int tab[MAX_CHAR],nbr;
+    char code[MAX_PROF] = {0};
+    noeud *tmp[MAX_CHAR];
     FILE *p;
     p = fopen(fichier, "r");
+    for(i = 0;i<MAX_CHAR;i++){
+        tab[i] = 0;
+    }
+    i=0;
     while((taille_arbre[i] = fgetc(p)) != ' '){
         i++;
     }
     taille_arbre[i] = '\0';
     nb = atoi(taille_arbre);
-    
-    for(i=0;i<nb-1;i++){
-        alphabet[i] = (noeud*)malloc(sizeof(noeud));
-        if(alphabet[i] == NULL){
-            printf("Erreur allocation mémoire.\n");
-            exit(-1);
-        }
-        alphabet[i]->caractere = fgetc(p);
-        printf("Traitement de %c (%d)",alphabet[i]->caractere ,alphabet[i]->caractere );
-        alphabet[i]->occurence = 0;
-        if((nb_bits[0] = fgetc(p)) == '0'){
-            nb_bits[0] = fgetc(p);
-            nb_bits[1] = '\0';
-        }else{
-            nb_bits[0] = fgetc(p);
-            nb_bits[1] = fgetc(p);
-            nb_bits[2] = '\0';
-        }
-        alphabet[i]->nb_bits = atoi(nb_bits)-1;
-        for(j=0;j<alphabet[i]->nb_bits;j++){
-            alphabet[i]->codage[j] = fgetc(p);
-        }
-        alphabet[i]->codage[j+1] = '\0';
-        printf("%d = %s\n",alphabet[i]->caractere,alphabet[i]->codage);
-        alphabet[i]->gauche = NULL;
-        alphabet[i]->droit = NULL;
+    while(fscanf(p,"%c %d;;",&c,&nbr) == 2){
+        tab[c] = nbr;
     }
     fclose(p);
+    for(i=0;i<MAX_CHAR;i++){
+        tmp[taille] = creer_feuille(tab, i);
+        if(tmp[taille] == NULL){
+            taille--;
+        }
+        taille++;
+    }
+    creer_noeud(tmp, taille);
+    code[0] = '0';
+    code[1] = '\0';
+    creer_code(tmp[0], alphabet, code, 1);
+    i=0;
+    while(i < MAX_CHAR && alphabet[i] != NULL){
+        printf("%c %s %d\n",alphabet[i]->caractere,alphabet[i]->codage,alphabet[i]->nb_bits);
+        i++;
+    }
+    /* Libération de tmp */
+    for(i=0;tmp[i] != NULL;i++){
+            free(tmp[i]);
+    }
 }
 
-int get_char(noeud *alphabet[MAX_CHAR],char seq[MAX_PROF]){
-    int i,j,state = 1;
+void print_r(unsigned int seq[MAX_PROF]){
+    int i =0;
+    while(seq[i] != -1){
+        printf("%d",seq[i]);
+        i++;
+    }
+    printf("\n");
+}
+
+int get_char(noeud *alphabet[MAX_CHAR],unsigned int seq[MAX_PROF]){
+    int i,j,state = 1,count = 0,len;
+    for(len = 0;seq[len] != -1;len++);
     for(i=0;i<MAX_CHAR;i++){
+        state = 1;
         if(alphabet[i] == NULL)return -1;/* On est arrivé à la fin */
-        
+        if(alphabet[i]->nb_bits != len){
+            continue;
+        }
+        count = 0;
         for(j=0;j<alphabet[i]->nb_bits;j++){
-            if(alphabet[i]->codage[j] != seq[j]){
+            if(seq[j] == -1){
                 state = 0;
-                printf("%c != %d\n",alphabet[i]->codage[j],seq[j]);
+                break;
+            }
+            if(alphabet[i]->codage[j] == seq[j]+'0'){
+            }else{
+                state = 0;
                 break;
             }
         }
-        if(state){
+        if(state == 1){
+            puts("Trouvé !");
             return alphabet[i]->caractere;
-        }else{
-            printf("%s = %s ?\n",alphabet[i]->codage,seq);
         }
     }
     return -1;
@@ -173,8 +184,8 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
     FILE *comp,*dest;
     int ignore = 0;
     char c;
-    char seq[MAX_PROF] = {0},tmp[2];
-    int t;
+    unsigned int seq[MAX_PROF] = {-1};
+    unsigned int t;
     int i = 0, j, nb;
     char nb_bits[3], taille_arbre[11] = {0};
     FILE *p;
@@ -185,51 +196,35 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
     while(fgetc(p) != '\0'){
         i++;
     }
-    while(!feof(p)){
-    fread(&c,sizeof(char),1,p);
-    afficher_octet(c);
-    for(i=7;i>=0;i--){
-        t = ((c >> i) & 0x01);/* On récupère le dernier bit de la série après un décalage */
-        f = enfiler(f,t);/* On l'enfile*/
-    }
-    
-    while(!est_file_vide(f)){
-        t = debut_file(f);
-        f=defiler(f);
-        printf("t = %d\n",t);
-        seq[strlen(seq)-1] = '0'+t;
-        printf("seq = %s\n",seq);
-        if(strlen(seq) > 10){
-            return;
+    while(!feof(p) || !est_file_vide(f)){
+        if(!feof(p)){
+            fread(&c,sizeof(char),1,p);
+            afficher_octet(c);
+            for(i=7;i>=0;i--){
+                t = ((c >> i) & 0x01);/* On récupère le dernier bit de la série après un décalage */
+                f = enfiler(f,t);/* On l'enfile*/
+            }
+            afficher_liste(f);
         }
-        c=get_char(alphabet,seq);
+        while(!est_file_vide(f)){
+            t = debut_file(f);
+            f= defiler(f);
+            for(j=0;seq[j] != -1;j++);
+            seq[j] = t;
+            seq[j+1] = -1;
+            printf("req = ");
+            print_r(seq);
+            c=get_char(alphabet,seq);
+            if(c != -1){
+                printf("OK c = %c\n",c);
+                break;
+            }
+        }
         if(c != -1){
-            printf("OK c = %c",c);
-            return;
-            break;
+            seq[0] = -1;
         }
-    }
-    printf("%c\n",c);
-    if(c == -1 && est_file_vide(f)){
-        continue;
-    }
-    fprintf(dest,"%c",c);
+        afficher_liste(f);
+        fprintf(dest,"%c",c);
     }
     return;
-    puts("Done reading");
-    comp = fopen(fichier_compresse,"r");
-    if(comp == NULL || dest == NULL){
-        mon_erreur("Erreur de fichier\n");
-    }
-    while(fgetc(comp) != '\n'){
-        ignore++;
-    }
-    fclose(comp);
-    comp = fopen(fichier_compresse,"rb");
-    if(comp == NULL){
-        mon_erreur("Impossible d'ouvrir le compressé !\n");
-    }
-    fseek(comp,0,SEEK_SET);
-    fread(&c,sizeof(char),ignore,comp);
-    printf("LOL\n");
 }
