@@ -54,13 +54,16 @@ void creer_noeud(noeud *tab[], int taille){
     int i, m = 0, n = 0;
     int *x = &m, *y = &n;
     noeud *arbre_huffman;
+    printf("%d\n",taille);
     for(i=0;i<taille-1;i++){
         arbre_huffman = (noeud*)malloc(sizeof(noeud));
         if(arbre_huffman == NULL){
             printf("Erreur allocation mémoire.\n");
-            return;
+            exit(-1);
         }
+        printf("%d\n",i);
         parcours_tableau(tab, taille, x, y);
+        printf("------\n%d,%d\n------\n",*x,*y);
         arbre_huffman->caractere = '\0';
         arbre_huffman->occurence = tab[*x]->occurence + tab[*y]->occurence;
         arbre_huffman->codage[0] = '\0';
