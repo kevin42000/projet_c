@@ -7,9 +7,11 @@
 int main(int argc, char *argv[]){
     int i, taille = 0/*, m = 0, n = 0*/;
     /*int *x = &m, *y = &n;*/
-    int tab[MAX_CHAR] = {0}, taille_code[33] = {0};
+    int tab[MAX_CHAR] = {0};
+    char taille_code[MAX_PROF] = {0};
     noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *p;
+
     if(argc!=2){
         printf("%s\n", argv[0]);
         return 1;
@@ -30,7 +32,6 @@ int main(int argc, char *argv[]){
     /*a partir d'ici l'arbre est construit*/
     taille_code[0] = '0';
     taille_code[1] = '\0';
-    puts("Step 1");
     creer_code(arbre_huffman[0], alphabet, taille_code, 1);
     i = 0;
     puts("char|occurrence|binaire|nb_bits");
@@ -40,8 +41,12 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
     creer_fichier("exemple.huf", argv[1], alphabet);
+<<<<<<< HEAD
     puts("DONE");
     return;
+=======
+    return 0;
+>>>>>>> a7ff95f4a964b463835e121bc255a09983f86604
     for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
     }
@@ -53,7 +58,7 @@ int main(int argc, char *argv[]){
         i++;
     }
     printf("\n");
-    /*creation_fichier(alphabet, "exemple2.txt", "exemple.huf");
+    /*creation_fichier(alphabet, "exemple2.txt", "exemple.huf");*/
     /*if(argc == 1){
     
   }else if(argv[1] == "-c"){
