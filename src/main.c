@@ -33,12 +33,14 @@ int main(int argc, char *argv[]){
     puts("Step 1");
     creer_code(arbre_huffman[0], alphabet, taille_code, 1);
     i = 0;
+    puts("char|occurrence|binaire|nb_bits");
     while(alphabet[i] != NULL){
-        printf("%c, %d, %s, %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits);
+        printf("  %c | %d        | %s | %d\n", alphabet[i]->caractere, alphabet[i]->occurence, alphabet[i]->codage, alphabet[i]->nb_bits);
         i++;
     }
     printf("\n");
     creer_fichier("exemple.huf", argv[1], alphabet);
+    puts("DONE");
     return;
     for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
