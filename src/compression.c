@@ -129,7 +129,7 @@ void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
     creer_code(tmp[0], alphabet, code, 1);
     i=0;
     while(i < MAX_CHAR && alphabet[i] != NULL){
-        printf("%c %s %d\n",alphabet[i]->caractere,alphabet[i]->codage,alphabet[i]->nb_bits);
+        /*printf("%c %s %d\n",alphabet[i]->caractere,alphabet[i]->codage,alphabet[i]->nb_bits);*/
         i++;
     }
     /* Libération de tmp */
@@ -169,7 +169,6 @@ int get_char(noeud *alphabet[MAX_CHAR],unsigned int seq[MAX_PROF]){
             }
         }
         if(state == 1){
-            puts("Trouvé !");
             return alphabet[i]->caractere;
         }
     }
@@ -179,10 +178,13 @@ int get_char(noeud *alphabet[MAX_CHAR],unsigned int seq[MAX_PROF]){
 void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_compresse){
     FILE *comp,*dest;
     int ignore = 0;
+    float percent = 0;
     char c;
-    unsigned long int size =0;
+    char progress[13];
+    unsigned long int size =0,max_size=0;
     unsigned int seq[MAX_PROF] = {-1};
     unsigned int t;
+    char decimal[4];
     int i = 0, j, nb;
     char nb_bits[3], taille_arbre[11] = {0};
     FILE *p;
@@ -192,8 +194,8 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
     fseek(p,0,SEEK_SET);
     while(fscanf(p,"%c %ld;;",&c,&t) == 2){
         size += t;
-        printf("treating %c %ld\n",c,size);
     }
+    max_size = size;
     fseek(p,0,SEEK_SET);
     while(fgetc(p) != '\0');
     t = 0;
@@ -202,12 +204,10 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
         if(!feof(p)){
             if(taille_file(f) < 32){
             fread(&c,sizeof(char),1,p);
-            afficher_octet(c);
             for(i=7;i>=0;i--){
                 t = ((c >> i) & 0x01);/* On récupère le dernier bit de la série après un décalage */
                 f = enfiler(f,t);/* On l'enfile*/
             }
-            afficher_liste(f);
             }
         }
         while(!est_file_vide(f)){
@@ -216,20 +216,26 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
             for(j=0;seq[j] != -1;j++);
             seq[j] = t;
             seq[j+1] = -1;
-            printf("req = ");
-            print_r(seq);
             c=get_char(alphabet,seq);
             if(c != -1){
-                printf("OK c = %c\n",c);
                 break;
             }
         }
         if(c != -1){
             seq[0] = -1;
         }
-        afficher_liste(f);
         fprintf(dest,"%c",c);
         size--;
+        percent = ((double)(max_size-size)/(double)max_size)*100.0;
+        progress[0] = '[';
+        for(i=1;i<=10;i++){
+            progress[i] = (10.0*i-1) < percent ? '*' : '-';
+        }
+        progress[11] = ']';
+        progress[12] = '\0';
+        printf("\r%.0f%% %s",percent,progress);
+        fflush(stdout);
     }
+    printf("\n");
     return;
 }
