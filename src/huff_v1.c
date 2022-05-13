@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 int main_compression(int argv, char *argc[]){
     int i, j;
     char nb[11] = {0}, *chaine;

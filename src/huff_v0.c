@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <unistd.h>
+#include <string.h>
 #include "../inc/occurence.h"
 #include "../inc/arbre.h"
 #include "../inc/compression.h"
@@ -25,7 +26,9 @@ int main_compression(int argc, char *argv[]){
         return 0;
     }
     fichier = fopen(argv[3], "r");
+    puts("lol1");
     occurence(fichier, tab);
+    puts("lol2");
     fclose(fichier);
     for(i=0;i<MAX_CHAR;i++){
         arbre_huffman[taille] = creer_feuille(tab, i);
@@ -34,15 +37,17 @@ int main_compression(int argc, char *argv[]){
         }
         taille++;
     }
+    puts("lol3");
     creer_noeud(arbre_huffman, taille);
+    puts("lol4");
     creer_code(arbre_huffman[0], alphabet, 0, 1);
+    puts("lol5");
     if(existe == 0){
         creer_fichier(argv[2], argv[3], alphabet);
     }else{
         while(access(nom_fichier, F_OK)==0 && existe < INT_MAX){
-            strcpy(ajout_nom, "(");
-            strcat(ajout_nom, existe+'0');
-            strcat(ajout_nom, ")");
+            puts("OK");
+            sprintf(ajout_nom,"(%c)",existe+'0');
             strcpy(nom_fichier, argv[2]);
             strcat(nom_fichier, ajout_nom);
             existe++;

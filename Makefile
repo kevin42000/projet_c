@@ -1,19 +1,23 @@
-NFLAGS= `pkg-config --libs-only-l MLV`
-
 CC= gcc
 
-CFLAGS= -W -Wall -lm -std=c89 -pedantic `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV`
+CFLAGS= -W -Wall -lm -std=c89 -pedantic
 
-sources= ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/main.c ./src/occurence.c
+sources= ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
 
 objets= $(sources:.c=.o)
 
 
-clean : projet
-	rm -r ./*.o ./src/*.o
+clean : main huffmanv1 huffmanv2
+	rm -r ./src/*.o
 
-projet: $(objets)
-	$(CC) $(CFLAGS) -o $@  $^ $(NFLAGS)
+main: ./src/main.c $(objets)
+	$(CC) $(CFLAGS) -o $@  $^
+
+huffmanv1: ./src/huff_v0.c $(objets)
+	$(CC) $(CFLAGS) -o $@  $^
+
+huffmanv2: ./src/huff_v1.c $(objets)
+	$(CC) $(CFLAGS) -o $@  $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ $(NFLAGS) -c $< 
+	$(CC) $(CFLAGS) -o $@ -c $< 
