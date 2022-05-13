@@ -1,11 +1,12 @@
 #ifndef DEF_ARBRE
 #define DEF_ARBRE
 #define MAX_CHAR 257
+#define MAX_PROF 33
 
 typedef struct noeud{
   char caractere;
   int occurence;
-  char codage[32];
+  char codage[MAX_PROF];
   int nb_bits;
   struct noeud *gauche;
   struct noeud *droit;
@@ -19,6 +20,6 @@ void creer_noeud(noeud *tab[], int taille);
 
 int est_feuille(noeud *noeud_courant);
 
-void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], int profondeur);
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[MAX_PROF], int profondeur);
 
 #endif

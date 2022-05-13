@@ -31,12 +31,12 @@ void affiche_la_totalite(char *fichier){
 
 /*compte les occurences des caractères du fichier*/
 void occurence(FILE *fic, int tab[MAX_CHAR]){
-  char caractere;
-  do{
+  unsigned char caractere;
+  while(1){
     caractere = fgetc(fic);
     if(feof(fic)){
       break;
     }
     tab[caractere]++;
-  }while(caractere != EOF);
+  }
 }

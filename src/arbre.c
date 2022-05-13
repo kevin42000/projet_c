@@ -84,9 +84,9 @@ int est_feuille(noeud *noeud_courant){
     return 0;
 }
 
-void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], int profondeur){
+void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[MAX_PROF], int profondeur){
     int i = 0;
-    char code_char[33] = {0}, tmp[33] = {0};
+    char code_char[MAX_PROF] = {0}, tmp[MAX_PROF] = {0};
     if(est_feuille(noeud_courant)){
         while(retour[i] != NULL){
             i++;
