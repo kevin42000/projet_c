@@ -10,7 +10,7 @@
 int main_compression(int argc, char *argv[]){
     int i, taille = 0, existe = 0;
     int tab[MAX_CHAR] = {0};
-    char ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
+    char code[MAX_PROF] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *fichier;
     if(argc !=4){
@@ -20,6 +20,7 @@ int main_compression(int argc, char *argv[]){
     if(access(argv[2], F_OK)==0){
         printf("<archive_finale> existe déjà.\n");
         existe = 1;
+        strcpy(nom_fichier, argv[2]);
     }
     if(access(argv[3], F_OK)!=0){
         printf("<dossiers_ou_fichiers_à_compresser> n'existe pas.\n");
@@ -40,14 +41,15 @@ int main_compression(int argc, char *argv[]){
     puts("lol3");
     creer_noeud(arbre_huffman, taille);
     puts("lol4");
-    creer_code(arbre_huffman[0], alphabet, 0, 1);
+    code[0] = '0';
+    code[1] = '\0';
+    creer_code(arbre_huffman[0], alphabet, code, 1);
     puts("lol5");
-    if(existe == 0){
+    if(existe == 0){printf("1\n");
         creer_fichier(argv[2], argv[3], alphabet);
     }else{
         while(access(nom_fichier, F_OK)==0 && existe < INT_MAX){
-            puts("OK");
-            sprintf(ajout_nom,"(%c)",existe+'0');
+            sprintf(ajout_nom,"%d",existe);
             strcpy(nom_fichier, argv[2]);
             strcat(nom_fichier, ajout_nom);
             existe++;
@@ -55,8 +57,9 @@ int main_compression(int argc, char *argv[]){
         if(existe == INT_MAX){
             printf("Impossible de créer l'archive.\n");
             return 0;
-        }
-    }
+        }printf("1\n");
+        creer_fichier(nom_fichier, argv[3], alphabet);
+    }printf("1\n");
     for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
     }
