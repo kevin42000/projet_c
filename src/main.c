@@ -10,7 +10,6 @@ int main(int argc, char *argv[]){
     int tab[MAX_CHAR] = {0}, taille_code[33] = {0};
     noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *p;
-
     if(argc!=2){
         printf("%s\n", argv[0]);
         return 1;
@@ -31,6 +30,7 @@ int main(int argc, char *argv[]){
     /*a partir d'ici l'arbre est construit*/
     taille_code[0] = '0';
     taille_code[1] = '\0';
+    puts("Step 1");
     creer_code(arbre_huffman[0], alphabet, taille_code, 1);
     i = 0;
     while(alphabet[i] != NULL){

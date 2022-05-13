@@ -1,4 +1,4 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/nicoangel/Bureau/projet_c/projet_c'
 gcc -W -Wall -lm -std=c89 -pedantic `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` -o src/mon_erreur.o `pkg-config --libs-only-l MLV` -c src/mon_erreur.c 
 gcc -W -Wall -lm -std=c89 -pedantic `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` -o src/liste.o `pkg-config --libs-only-l MLV` -c src/liste.c 

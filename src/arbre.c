@@ -86,7 +86,7 @@ int est_feuille(noeud *noeud_courant){
 
 void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], int profondeur){
     int i = 0;
-    char code_char[32] = {0}, tmp[33] = {0};
+    char code_char[33] = {0}, tmp[33] = {0};
     if(est_feuille(noeud_courant)){
         while(retour[i] != NULL){
             i++;
@@ -108,11 +108,15 @@ void creer_code(noeud *noeud_courant, noeud *retour[MAX_CHAR], char code[33], in
         strcpy(code_char, code);
         strcat(code_char, tmp);
         profondeur++;
-        creer_code(noeud_courant->gauche, retour, code_char, profondeur);
+        if(noeud_courant->gauche != NULL){
+            creer_code(noeud_courant->gauche, retour, code_char, profondeur);
+        }
         tmp[0] = '1';
         tmp[1] = '\0';
         strcpy(code_char, code);
         strcat(code_char, tmp);
-        creer_code(noeud_courant->droit, retour, code_char, profondeur);
+        if(noeud_courant->droit != NULL){
+            creer_code(noeud_courant->droit, retour, code_char, profondeur);
+        }
     }
 }
