@@ -41,12 +41,8 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
     creer_fichier("exemple.huf", argv[1], alphabet);
-<<<<<<< HEAD
     puts("DONE");
-    return;
-=======
     return 0;
->>>>>>> a7ff95f4a964b463835e121bc255a09983f86604
     for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
     }
