@@ -5,6 +5,8 @@
 #include "../inc/arbre.h"
 #include "../inc/compression.h"
 #include "../inc/pile.h"
+#include "../inc/file.h"
+
 void afficher_octet(char b){
     int i;
     for(i=0;i<8;i++){
@@ -50,7 +52,7 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
         i++;
     }
     
-    fputc('\n', p);
+    fputc('\0', p);
     fclose(p);
     /* début de l'écriture du fichier binaire */
     p = fopen(fichier, "ab");
@@ -121,9 +123,10 @@ void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
         alphabet[i] = (noeud*)malloc(sizeof(noeud));
         if(alphabet[i] == NULL){
             printf("Erreur allocation mémoire.\n");
-            return;
+            exit(-1);
         }
         alphabet[i]->caractere = fgetc(p);
+        printf("Traitement de %c (%d)",alphabet[i]->caractere ,alphabet[i]->caractere );
         alphabet[i]->occurence = 0;
         if((nb_bits[0] = fgetc(p)) == '0'){
             nb_bits[0] = fgetc(p);
@@ -133,24 +136,88 @@ void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
             nb_bits[1] = fgetc(p);
             nb_bits[2] = '\0';
         }
-        alphabet[i]->nb_bits = atoi(nb_bits);
+        alphabet[i]->nb_bits = atoi(nb_bits)-1;
         for(j=0;j<alphabet[i]->nb_bits;j++){
             alphabet[i]->codage[j] = fgetc(p);
         }
         alphabet[i]->codage[j+1] = '\0';
+        printf("%d = %s\n",alphabet[i]->caractere,alphabet[i]->codage);
         alphabet[i]->gauche = NULL;
         alphabet[i]->droit = NULL;
     }
     fclose(p);
 }
 
+int get_char(noeud *alphabet[MAX_CHAR],char seq[MAX_PROF]){
+    int i,j,state = 1;
+    for(i=0;i<MAX_CHAR;i++){
+        if(alphabet[i] == NULL)return -1;/* On est arrivé à la fin */
+        
+        for(j=0;j<alphabet[i]->nb_bits;j++){
+            if(alphabet[i]->codage[j] != seq[j]){
+                state = 0;
+                printf("%c != %d\n",alphabet[i]->codage[j],seq[j]);
+                break;
+            }
+        }
+        if(state){
+            return alphabet[i]->caractere;
+        }else{
+            printf("%s = %s ?\n",alphabet[i]->codage,seq);
+        }
+    }
+    return -1;
+}
+
 void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_compresse){
     FILE *comp,*dest;
     int ignore = 0;
     char c;
+    char seq[MAX_PROF] = {0},tmp[2];
+    int t;
+    int i = 0, j, nb;
+    char nb_bits[3], taille_arbre[11] = {0};
+    FILE *p;
+    file f = file_vide();
+    p = fopen(fichier_compresse, "rb");
+    dest = fopen(fichier,"w");
+    fseek(p,0,SEEK_SET);
+    while(fgetc(p) != '\0'){
+        i++;
+    }
+    while(!feof(p)){
+    fread(&c,sizeof(char),1,p);
+    afficher_octet(c);
+    for(i=7;i>=0;i--){
+        t = ((c >> i) & 0x01);/* On récupère le dernier bit de la série après un décalage */
+        f = enfiler(f,t);/* On l'enfile*/
+    }
+    
+    while(!est_file_vide(f)){
+        t = debut_file(f);
+        f=defiler(f);
+        printf("t = %d\n",t);
+        seq[strlen(seq)-1] = '0'+t;
+        printf("seq = %s\n",seq);
+        if(strlen(seq) > 10){
+            return;
+        }
+        c=get_char(alphabet,seq);
+        if(c != -1){
+            printf("OK c = %c",c);
+            return;
+            break;
+        }
+    }
+    printf("%c\n",c);
+    if(c == -1 && est_file_vide(f)){
+        continue;
+    }
+    fprintf(dest,"%c",c);
+    }
+    return;
     puts("Done reading");
     comp = fopen(fichier_compresse,"r");
-    dest = fopen(fichier,"w");
     if(comp == NULL || dest == NULL){
         mon_erreur("Erreur de fichier\n");
     }

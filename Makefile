@@ -2,7 +2,7 @@ CC= gcc
 
 CFLAGS= -W -Wall -lm -std=c89 -pedantic
 
-sources= ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
+sources= ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
 
 objets= $(sources:.c=.o)
 

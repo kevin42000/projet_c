@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 13 09:36:50 2022
+# Make data base, printed on Fri May 13 10:57:09 2022
 
 # Variables
 
@@ -231,7 +231,7 @@ MAKEFILES :=
 # environment
 SNAP_COOKIE = 9h8izJrNZV_KYjXktiK5jdwYgodGEz-fIawCz3biyTGwJKjmJgMs
 # makefile (from 'Makefile', line 5)
-sources = ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
+sources = ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
 # automatic
 <F = $(notdir $<)
 # environment
@@ -294,6 +294,7 @@ all:
 src/compression.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 # Not a target:
@@ -305,11 +306,11 @@ src/occurence.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-13 09:35:46.008687091
+#  Last modified 2022-05-13 10:56:38.340552547
 #  File has been updated.
 #  Successfully updated.
 
-huffmanv1: src/huff_v0.c src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huffmanv1: src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -334,7 +335,7 @@ src/main.c:
 #  Modification time never checked.
 #  File has not been updated.
 
-huffmanv2: src/huff_v1.c src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huffmanv2: src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -372,7 +373,13 @@ src/liste.o:
 #  Modification time never checked.
 #  File has not been updated.
 
-main: src/main.c src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+# Not a target:
+src/file.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+main: src/main.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -386,20 +393,19 @@ src/pile.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=17/1024=2%, Rehash=0, Collisions=1/54=2%
+# Load=18/1024=2%, Rehash=0, Collisions=1/58=2%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 36 / storage = 325 B / avg = 9 B
-# current buf: size = 8162 B / used = 325 B / count = 36 / avg = 9 B
- 
+# strcache buffers: 1 (0) / strings = 37 / storage = 337 B / avg = 9 B
+# current buf: size = 8162 B / used = 337 B / count = 37 / avg = 9 B
 
-# strcache performance: lookups = 62 / hit rate = 41%
+# strcache performance: lookups = 65 / hit rate = 43%
 # hash-table stats:
-# Load=36/8192=0%, Rehash=0, Collisions=1/62=2%
-# Finished Make data base on Fri May 13 09:36:50 2022
+# Load=37/8192=0%, Rehash=0, Collisions=1/65=2%
+# Finished Make data base on Fri May 13 10:57:09 2022
 
  
