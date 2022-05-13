@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -102,7 +103,7 @@ int main_decompression(int argc, char *argv[]){
         creation_fichier(alphabet, nom_fichier, argv[2]);
     }else{
         if(arg == 1){
-            if(mkdir(argv[3], S_IRWXU|S_IRGRP|S_IXGRP) != 0){
+            if(mkdir(argv[3], S_IRWXU|S_IRGRP|S_IXGRP) != 0 && access(argv[3], F_OK)!=0){
                 printf("Impossible de créer le répertoire.\n");
                 return 0;
             }
@@ -113,6 +114,7 @@ int main_decompression(int argc, char *argv[]){
             strcat(nom_fichier, "/");
         }
         strcat(nom_fichier, fichier);
+        strcpy(fichier, nom_fichier);
         while(access(nom_fichier, F_OK)==0 && arg < INT_MAX){
             sprintf(ajout_nom,"%d",arg);
             strcpy(nom_fichier, fichier);
