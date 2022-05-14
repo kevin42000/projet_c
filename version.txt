@@ -1,0 +1,7 @@
+La première version du logiciel permet de compresser un fichier et de le décompresser.
+Pour la compression, il faut donner le nom de l'archive et le nom du fichier à compresser.
+Pour la décompression, il faut donner le nom de l'archive à décompresser et il y a un paramètre facultatif pour décompresser le fichier dans un répertoire donné.
+
+La deuxième version du logiciel permet de compresser un ou plusieurs fichier(s) et de le(s) décompresser.
+Pour la compression, il faut donner le nom de l'archive et le(s) nom(s) du(des) fichier(s) à compresser.
+Pour la décompression, il faut donner le nom de l'archive à décompresser et il y a un paramètre facultatif pour décompresser le(s) fichier(s) dans un répertoire donné.

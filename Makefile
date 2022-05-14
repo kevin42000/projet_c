@@ -7,16 +7,19 @@ sources= ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.
 objets= $(sources:.c=.o)
 
 
-clean : main huffmanv1 huffmanv2
+clean : huff_v0 huff_v1 huff_v2 huff_v3
 	rm -r ./src/*.o
 
-main: ./src/main.c $(objets)
+huff_v0: ./src/huff_v0.c $(objets)
 	$(CC) $(CFLAGS) -o $@  $^
 
-huffmanv1: ./src/huff_v0.c $(objets)
+huff_v1: ./src/huff_v1.c $(objets)
 	$(CC) $(CFLAGS) -o $@  $^
 
-huffmanv2: ./src/huff_v1.c $(objets)
+huff_v2: ./src/huff_v2.c $(objets)
+	$(CC) $(CFLAGS) -o $@  $^
+
+huff_v3: ./src/huff_v3.c $(objets)
 	$(CC) $(CFLAGS) -o $@  $^
 
 %.o: %.c
