@@ -69,6 +69,7 @@ int main_decompression(int argc, char *argv[]){
     char *p = NULL, fichier[MAX_CHAR] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *alphabet[MAX_CHAR] = {0};
     DIR *repertoire;
+    struct dirent *liste;
     if(argc !=3 && argc !=4){
         printf("Veuillez entrer les arguments au format -d archive_a_décompresser dossier_cible.\n");
         return 0;
@@ -82,6 +83,7 @@ int main_decompression(int argc, char *argv[]){
             printf("Création de <dossier_cible>=%s.\n", argv[3]);
             arg = 1;
         }
+        closedir(repertoire);
     }
     decompression(alphabet, argv[2]);
     strcpy(fichier, argv[2]);
@@ -107,6 +109,14 @@ int main_decompression(int argc, char *argv[]){
                 printf("Impossible de créer le répertoire.\n");
                 return 0;
             }
+            repertoire = opendir("./");
+            while((liste = readdir(repertoire))){
+                if(strcmp(liste->d_name, argv[3])==0){
+                    printf("Impossible de créer le répertoire car il y a un fichier portant le même nom.\n");
+                    return 0;
+                }
+            }
+            closedir(repertoire);
         }
         arg = 1;
         strcat(nom_fichier, argv[3]);
