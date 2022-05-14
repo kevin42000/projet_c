@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 13 10:57:09 2022
+# Make data base, printed on Sat May 14 19:19:41 2022
 
 # Variables
 
@@ -51,7 +51,7 @@ SNAP_DATA = /var/snap/code/96
 # environment
 VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"25fe6a3290ec415596628d4afc87a88c.fr","_translationsConfigFile":"/home/nicoangel/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/tcf.json","_cacheRoot":"/home/nicoangel/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr","_resolvedLanguagePackCoreLocation":"/home/nicoangel/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/da15b6fd3ef856477bf6f4fb29ba1b7af717770d","_corruptedFile":"/home/nicoangel/.config/Code/clp/25fe6a3290ec415596628d4afc87a88c.fr/corrupted.info","_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:52972
+JOURNAL_STREAM = 8:56168
 # makefile (from 'Makefile', line 3)
 CFLAGS = -W -Wall -lm -std=c89 -pedantic
 # environment
@@ -77,7 +77,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 _ = /snap/code/96/usr/share/code/code
 # environment
-MANAGERPID = 2135
+MANAGERPID = 2099
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -91,7 +91,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/nicoangel-Prestige-15-A10SC:@/tmp/.ICE-unix/2361,unix/nicoangel-Prestige-15-A10SC:/tmp/.ICE-unix/2361
+SESSION_MANAGER = local/nicoangel-Prestige-15-A10SC:@/tmp/.ICE-unix/2323,unix/nicoangel-Prestige-15-A10SC:/tmp/.ICE-unix/2323
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -109,7 +109,7 @@ DISABLE_WAYLAND = 1
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 676a5674ad4d4e80982a961135ebdaf8
+INVOCATION_ID = be01851907604e2da062bd4b14b00349
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/96/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -121,7 +121,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 2972
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2850
 # automatic
 %F = $(notdir $%)
 # environment
@@ -135,7 +135,7 @@ PWD = /home/nicoangel/Bureau/projet_c/projet_c
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 2324
+SSH_AGENT_PID = 2286
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -187,7 +187,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-43bb6f47-2ef1-4407-a1a1-4820fca8dae2.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-d7371555-e881-451d-ab0f-0e879b6bebe0.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -259,9 +259,9 @@ GJS_DEBUG_OUTPUT = stderr
 # environment
 LANG = C
 # environment
-VSCODE_PID = 3025
+VSCODE_PID = 2903
 # variable set hash-table stats:
-# Load=124/1024=12%, Rehash=0, Collisions=26/155=17%
+# Load=124/1024=12%, Rehash=0, Collisions=28/157=18%
 
 # Pattern-specific Variable Values
 
@@ -269,19 +269,26 @@ VSCODE_PID = 3025
 
 # Directories
 
-# . (device 66306, inode 6820432): 19 files, no impossibilities.
+# . (device 66306, inode 6820432): 27 files, no impossibilities.
 
-# 19 files, no impossibilities in 1 directories.
+# 27 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 %.o: %.c
-#  recipe to execute (from 'Makefile', line 23):
+#  recipe to execute (from 'Makefile', line 26):
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
 # 1 implicit rules, 0 (0.0%) terminal.
 
 # Files
+
+huff_v0: src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 14):
+	$(CC) $(CFLAGS) -o $@  $^
 
 # Not a target:
 all:
@@ -294,8 +301,14 @@ all:
 src/compression.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
+
+huff_v1: src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 17):
+	$(CC) $(CFLAGS) -o $@  $^
 
 # Not a target:
 src/occurence.o:
@@ -306,16 +319,9 @@ src/occurence.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-13 10:56:38.340552547
+#  Last modified 2022-05-14 18:39:36.646445482
 #  File has been updated.
 #  Successfully updated.
-
-huffmanv1: src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 17):
-	$(CC) $(CFLAGS) -o $@  $^
 
 # Not a target:
 src/arbre.o:
@@ -324,23 +330,23 @@ src/arbre.o:
 #  File has not been updated.
 
 # Not a target:
-src/mon_erreur.o:
+src/huff_v3.c:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-src/main.c:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-huffmanv2: src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v2: src/huff_v2.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 20):
 	$(CC) $(CFLAGS) -o $@  $^
+
+# Not a target:
+src/mon_erreur.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 src/huff_v0.c:
@@ -360,7 +366,7 @@ src/huff_v1.c:
 #  Modification time never checked.
 #  File has not been updated.
 
-clean: main huffmanv1 huffmanv2
+clean: huff_v0 huff_v1 huff_v2 huff_v3
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -379,11 +385,11 @@ src/file.o:
 #  Modification time never checked.
 #  File has not been updated.
 
-main: src/main.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v3: src/huff_v3.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 14):
+#  recipe to execute (from 'Makefile', line 23):
 	$(CC) $(CFLAGS) -o $@  $^
 
 # Not a target:
@@ -392,20 +398,26 @@ src/pile.o:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+src/huff_v2.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # files hash-table stats:
-# Load=18/1024=2%, Rehash=0, Collisions=1/58=2%
+# Load=20/1024=2%, Rehash=0, Collisions=0/70=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 37 / storage = 337 B / avg = 9 B
-# current buf: size = 8162 B / used = 337 B / count = 37 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 46 / storage = 439 B / avg = 9 B
+# current buf: size = 8162 B / used = 439 B / count = 46 / avg = 9 B
 
-# strcache performance: lookups = 65 / hit rate = 43%
+# strcache performance: lookups = 84 / hit rate = 45%
 # hash-table stats:
-# Load=37/8192=0%, Rehash=0, Collisions=1/65=2%
-# Finished Make data base on Fri May 13 10:57:09 2022
+# Load=46/8192=1%, Rehash=0, Collisions=1/84=1%
+# Finished Make data base on Sat May 14 19:19:41 2022
 
  

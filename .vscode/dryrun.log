@@ -1,4 +1,4 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/nicoangel/Bureau/projet_c/projet_c'
 gcc -W -Wall -lm -std=c89 -pedantic -o src/file.o -c src/file.c 
 gcc -W -Wall -lm -std=c89 -pedantic -o src/mon_erreur.o -c src/mon_erreur.c 
@@ -7,9 +7,10 @@ gcc -W -Wall -lm -std=c89 -pedantic -o src/pile.o -c src/pile.c
 gcc -W -Wall -lm -std=c89 -pedantic -o src/arbre.o -c src/arbre.c 
 gcc -W -Wall -lm -std=c89 -pedantic -o src/compression.o -c src/compression.c 
 gcc -W -Wall -lm -std=c89 -pedantic -o src/occurence.o -c src/occurence.c 
-gcc -W -Wall -lm -std=c89 -pedantic -o main  src/main.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
-gcc -W -Wall -lm -std=c89 -pedantic -o huffmanv1  src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
-gcc -W -Wall -lm -std=c89 -pedantic -o huffmanv2  src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+gcc -W -Wall -lm -std=c89 -pedantic -o huff_v0  src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+gcc -W -Wall -lm -std=c89 -pedantic -o huff_v1  src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+gcc -W -Wall -lm -std=c89 -pedantic -o huff_v2  src/huff_v2.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+gcc -W -Wall -lm -std=c89 -pedantic -o huff_v3  src/huff_v3.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
 rm -r ./src/*.o
 make: Leaving directory '/home/nicoangel/Bureau/projet_c/projet_c'
  
