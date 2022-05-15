@@ -15,7 +15,7 @@
 int main_compression_fichier(int argc, char *argv[]){
     int i, taille = 0, existe = 0;
     int tab[MAX_CHAR] = {0};
-    char code[MAX_PROF] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
+    char code[MAX_PROF] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *fichier;
     if(argc !=4){
@@ -23,12 +23,11 @@ int main_compression_fichier(int argc, char *argv[]){
         return 0;
     }
     if(access(argv[2], F_OK)==0){
-        printf("<archive_finale> existe déjà.\n");
+        printf("%s existe déjà.\n", argv[2]);
         existe = 1;
-        strcpy(nom_fichier, argv[2]);
     }
     if(access(argv[3], F_OK)!=0){
-        printf("<fichier_à_compresser> n'existe pas.\n");
+        printf("%s n'existe pas.\n", argv[3]);
         return 0;
     }
     fichier = fopen(argv[3], "r");
@@ -45,56 +44,41 @@ int main_compression_fichier(int argc, char *argv[]){
     code[0] = '0';
     code[1] = '\0';
     creer_code(arbre_huffman[0], alphabet, code, 1);
-    if(existe == 0){
-        creer_fichier(argv[2], argv[3], alphabet);
-    }else{
-        while(access(nom_fichier, F_OK)==0 && existe < INT_MAX){
-            sprintf(ajout_nom,"%d",existe);
-            strcpy(nom_fichier, argv[2]);
-            strcat(nom_fichier, ajout_nom);
-            existe++;
-        }
-        if(existe == INT_MAX){
-            printf("Impossible de créer l'archive.\n");
-            return 0;
-        }
-        creer_fichier(nom_fichier, argv[3], alphabet);
+    strcpy(nom_fichier, change_nom_fichier(argv[2]));
+    if(existe == 1){
+        printf("Nouveau nom de l'archive: %s\n", nom_fichier);
     }
+    creer_fichier(nom_fichier, argv[3], alphabet);
     for(i=0;i<MAX_CHAR;i++){
+        free(arbre_huffman[i]);
         free(alphabet[i]);
     }
     return 1;
 }
 
 int main_compression(int argc, char *argv[]){
-    int i, j, k, taille = 0, existe = 0, m = 1, n = 0, o, p;
-    int tab[MAX_CHAR] = {0};
-    char caractere, nb_n[11] = {0}, code[MAX_PROF] = {0}, ajout_nom[4] = {0}, nb[11] = {0}, *chaine, nom_fichier[MAX_CHAR] = {0}, nom_fichier_temporaire[MAX_CHAR] = {0};
-    char **liste_tmp, **liste_source;
+    int i = 0, j, p;
+    char caractere, chemin[MAX_PROF] = {0}, *argv2[4], nb[11] = {0}, *chaine, nom_fichier[MAX_CHAR] = {0};
+    char **liste_avant, **liste_tmp, **liste_source, **liste_tmp2;
     /*noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};*/
-    FILE *fichier, *archive;
+    FILE *fichier, *tmp;
     DIR *repertoire;
     struct dirent *liste;
-    if(argc < 4){
+    if(argc != 4){
         printf("Veuillez entrer les arguments au format -c archive_finale dossiers_à_compresser.\n");
         return 0;
     }
     if(access(argv[2], F_OK)==0){
         printf("%s existe déjà.\n", argv[2]);
-        existe = 1;
-        strcpy(nom_fichier, argv[2]);
     }
     repertoire = opendir(argv[3]);
-    if(access(argv[3], F_OK)!=0 && repertoire == NULL){
+    if(access(argv[3], F_OK)!=0){
         printf("<fichier_ou_dossier_à_compresser> n'existe pas.\n");
         return 0;
-    }
-    
-    if(repertoire == NULL){
+    }else if(repertoire == NULL){
         return main_compression_fichier(argc, argv);
     }
     
-    i = 0;
     while((liste = readdir(repertoire))){
         if(liste->d_type == 4 && strcmp(liste->d_name, ".") != 0 && strcmp(liste->d_name, "..") != 0){
             printf("Il y a des répertoires dans votre répertoire à compresser.\n");
@@ -105,42 +89,17 @@ int main_compression(int argc, char *argv[]){
     }
     closedir(repertoire);
     
-    j = i; /*nombre de fichiers à compresser*/
-    o = j;
-    liste_tmp = (char**)malloc(j * sizeof(char*));
-    if(liste_tmp == NULL){
-        printf("Erreur allocation mémoire.");
-        return 0;
-    }
-    for(i=0;i<j;i++){
-        liste_tmp[i] = (char*)malloc(MAX_CHAR * sizeof(char));
-        if(liste_tmp[i] == NULL){
-            printf("Erreur allocation mémoire.");
-            return 0;
-        }
-        strcpy(liste_tmp[i], "\0");
-    }
+    liste_source = creer_liste(i);
+    liste_tmp = creer_liste(i);
     
-    liste_source = (char**)malloc(j * sizeof(char*));
-    if(liste_source == NULL){
-        printf("Erreur allocation mémoire.");
-        return 0;
-    }
-    for(i=0;i<j;i++){
-        liste_source[i] = (char*)malloc(MAX_CHAR * sizeof(char));
-        if(liste_source[i] == NULL){
-            printf("Erreur allocation mémoire.");
-            return 0;
-        }
-        strcpy(liste_source[i], "\0");
-    }
-    
-    if((repertoire = opendir(argv[3])) == NULL){
-        printf("<répertoire_cible>=%s n'existe pas.\n", argv[3]);
-        return 0;
-    }
     i = 0;
     /*liste_source contient la liste des fichiers à compresser*/
+    strcpy(chemin, "./");
+    strcat(chemin, argv[3]);
+    if(chemin[strlen(chemin)] != '/'){
+        strcat(chemin, "/");
+    }
+    repertoire = opendir(chemin);
     while((liste = readdir(repertoire))){
         if(liste->d_type == 8){
             strcpy(liste_source[i], liste->d_name);
@@ -148,8 +107,77 @@ int main_compression(int argc, char *argv[]){
         }
     }
     closedir(repertoire);
-    
-    if(existe == 1){
+    for(j=0;j<i;j++){
+        liste_avant = liste_repertoire(chemin);
+        argv2[0] = NULL;
+        argv2[1] = NULL;
+        argv2[2] = (char*)malloc(4 * sizeof(char));
+        argv2[3] = (char*)malloc((strlen(liste_source[j])+1) * sizeof(char));
+        strcpy(nom_fichier, "tmp");
+        sprintf(nb, "%d", j);
+        strcat(nom_fichier, nb);
+        strcpy(argv2[2], nom_fichier);
+        strcpy(argv2[3], liste_source[j]);
+        if(chdir(chemin) != 0){
+            return 0;
+        }
+        main_compression_fichier(4, argv2);
+        if(chdir("../") != 0){
+            return 0;
+        }
+        liste_tmp2 = liste_fichier_tmp(chemin, liste_avant);
+        strcpy(liste_tmp[j], liste_tmp2[0]);
+    }
+    strcpy(nom_fichier, argv[2]);
+    strcpy(nom_fichier, change_nom_fichier(nom_fichier));
+    printf("Nom de l'archive: %s\n", nom_fichier);
+    fichier = fopen(nom_fichier, "w");
+    sprintf(nb, "%d", i+1);
+    fputs(nb, fichier);
+    fputc('\n', fichier);
+    fputs(argv[3], fichier);
+    fputc('\n', fichier);
+    for(j=0;j<i;j++){
+        if((chaine = strrchr(liste_source[j], '/')) != NULL){
+            fputs((chaine + 1), fichier);
+        }else{
+            fputs(liste_source[j], fichier);
+        }
+        fputc('\n', fichier);
+    }
+    if(chdir(chemin) != 0){
+        return 0;
+    }
+    for(j=0;j<i;j++){
+        p = 1;
+        tmp = fopen(liste_tmp[i], "r");
+        do{
+            caractere = fgetc(tmp);
+            if(feof(tmp)){
+                break;
+            }else if(caractere == '\n'){
+                p++;
+            }
+        }while(caractere != EOF);
+        fclose(tmp);
+        sprintf(nb, "%d", p);
+        fputs(nb, fichier);
+        fputc('\n', fichier);
+        tmp = fopen(liste_tmp[i], "r");
+        do{
+            caractere = fgetc(tmp);
+            if(feof(tmp)){
+                break;
+            }
+            fputc(caractere, fichier);
+        }while(caractere != EOF);
+        fclose(tmp);
+        fputc('\n', fichier);
+        remove(liste_tmp[i]);
+    }
+    fclose(fichier);
+    return 1;
+    /*if(existe == 1){
         while(access(nom_fichier, F_OK)==0 && existe < INT_MAX){
             sprintf(ajout_nom,"%d",existe);
             strcpy(nom_fichier, argv[2]);
@@ -160,11 +188,11 @@ int main_compression(int argc, char *argv[]){
             printf("Impossible de créer l'archive.\n");
             return 0;
         }
-        printf("Nouveau nom de l'archive : %s\n", nom_fichier);
+        printf("Nouveau nom de l'archive : %s\n", nom_fichier);*/
         /*creer_fichier(nom_fichier, argv[3], alphabet);*/
-    }else{
+    /*}else{
         strcpy(nom_fichier, argv[2]);
-    }
+    }*/
     /*création de l'archive
       Le format de donnée est :
       nb_fichiers
@@ -179,27 +207,27 @@ int main_compression(int argc, char *argv[]){
       Pour décompresser, il suffira de lire l'en-tête de l'archive pour voir le nombre de fichiers à décompresser.
       Et pour chacun d'entre eux, on lira en utilisant le nombre de lignes indiqué tout le contenu pour chaque fichier, ce contenu sera écrit dans un fichier temporaire à chaque fois et on lancera la décompression à partir de ces fichiers
     */
-    fichier = fopen(nom_fichier, "w");
-    sprintf(nb, "%d", j+1);
+    /*fichier = fopen(nom_fichier, "w");
+    sprintf(nb, "%d", i+1);
     fputs(nb, fichier);
     fputc('\n', fichier);
     fputs(argv[3], fichier);
     fputc('\n', fichier);
-    for(i=0;i<j;i++){
-        if((chaine = strrchr(liste_source[i], '/')) != NULL){
+    for(j=0;j<i;j++){
+        if((chaine = strrchr(liste_source[j], '/')) != NULL){
             fputs((chaine + 1), fichier);
         }else{
-            fputs(liste_source[i], fichier);
+            fputs(liste_source[j], fichier);
         }
         fputc('\n', fichier);
     }
     fclose(fichier);
     
     for(i=0;i<j;i++){
-        noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
+    noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};*/
         /*ici on lance la compression pour chaque fichier*/
         /*une fois qu'un fichier est compressé, on l'insère dans l'archive*/
-        strcpy(nom_fichier_temporaire, argv[3]);
+        /*strcpy(nom_fichier_temporaire, argv[3]);
         strcat(nom_fichier_temporaire, "/");
         strcat(nom_fichier_temporaire, liste_source[i]);
         strcpy(liste_source[i], nom_fichier_temporaire);
@@ -225,9 +253,9 @@ int main_compression(int argc, char *argv[]){
             sprintf(ajout_nom, "%d", existe);
             strcat(nom_fichier_temporaire, ajout_nom);
             existe++;
-        }
+            }*/
         /*liste des fichiers temporaires*/
-        m = 1;
+        /*m = 1;
         n = 0;
         while(m == 1){
             if(liste_tmp[n][0] == '\0'){
@@ -247,11 +275,11 @@ int main_compression(int argc, char *argv[]){
             free(arbre_huffman[k]);
             free(alphabet[k]);
         }
-    }
+        }*/
     /*maintenant, on a la liste des fichiers temporaires et tous les fichiers ont étés compressés dans ces fichiers temporaires.*/
-    archive = fopen(nom_fichier, "a");
-    for(i=0;i<o;i++){
-        p = 1;
+    /*archive = fopen(nom_fichier, "a");
+      for(i=0;i<o;i++){*/
+/*        p = 1;
         fichier = fopen(liste_tmp[i], "r");
         do{
             caractere = fgetc(fichier);
@@ -278,82 +306,48 @@ int main_compression(int argc, char *argv[]){
         remove(liste_tmp[i]);
     }
     fclose(archive);
-    return 1;
+    return 1;*/
 }
 
 int main_decompression_fichier(int argc, char *argv[]){
-    int arg = 0;
-    char *p = NULL, fichier[MAX_CHAR] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
+    char *p = NULL, fichier[MAX_CHAR] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *alphabet[MAX_CHAR] = {0};
     DIR *repertoire;
-    struct dirent *liste;
+    
     if(argc !=3 && argc !=4){
         printf("Veuillez entrer les arguments au format -d archive_a_décompresser dossier_cible.\n");
         return 0;
     }
     if(access(argv[2], F_OK)!=0){
-        printf("<archive_à_décompresser> n'existe pas.\n");
+        printf("%s n'existe pas.\n",argv[2]);/* je pense que c'est mieux de donner le chemin plutôt que la variable du manuelle */
         return 0;
+    }
+    decompression(alphabet, argv[2]);
+    strcpy(nom_fichier, argv[2]);
+    if((p=strrchr(nom_fichier, '.')) && p != NULL && strstr(p, ".huf")){
+        strcpy(p, "\0");
     }
     if(argc == 4){
         if((repertoire = opendir(argv[3])) == NULL){
-            printf("Création de <dossier_cible>=%s.\n", argv[3]);
-            arg = 1;
-        }
-        closedir(repertoire);
-    }
-    decompression(alphabet, argv[2]);
-    strcpy(fichier, argv[2]);
-    if((p=strrchr(fichier, '.')) && p != NULL && strstr(p, ".huf")){
-        strcpy(p, "\0");
-    }
-    if(argc == 3){
-        strcpy(nom_fichier, fichier);
-        while(access(nom_fichier, F_OK)==0 && arg < INT_MAX){
-            sprintf(ajout_nom,"%d",arg);
-            strcpy(nom_fichier, fichier);
-            strcat(nom_fichier, ajout_nom);
-            arg++;
-        }
-        if(arg == INT_MAX){
-            printf("Impossible de créer le fichier.\n");
-            return 0;
-        }
-        creation_fichier(alphabet, nom_fichier, argv[2]);
-    }else{
-        if(arg == 1){
+            printf("Création de %s.\n", argv[3]);
+            if(access(argv[3], F_OK)==0){
+                printf("Impossible de créer le répertoire car un fichier porte déjà le même nom que le répertoire à créer.\n");
+                return 0;
+            }
             if(mkdir(argv[3], S_IRWXU|S_IRGRP|S_IXGRP) != 0 && access(argv[3], F_OK)!=0){
                 printf("Impossible de créer le répertoire.\n");
                 return 0;
             }
-            repertoire = opendir("./");
-            while((liste = readdir(repertoire))){
-                if(strcmp(liste->d_name, argv[3])==0){
-                    printf("Impossible de créer le répertoire car il y a un fichier portant le même nom.\n");
-                    return 0;
-                }
-            }
-            closedir(repertoire);
         }
-        arg = 1;
-        strcat(nom_fichier, argv[3]);
-        if(nom_fichier[strlen(nom_fichier)] != '/'){
-            strcat(nom_fichier, "/");
-        }
-        strcat(nom_fichier, fichier);
+        closedir(repertoire);
         strcpy(fichier, nom_fichier);
-        while(access(nom_fichier, F_OK)==0 && arg < INT_MAX){
-            sprintf(ajout_nom,"%d",arg);
-            strcpy(nom_fichier, fichier);
-            strcat(nom_fichier, ajout_nom);
-            arg++;
-        }
-        if(arg == INT_MAX){
-            printf("Impossible de créer le fichier.\n");
-            return 0;
-        }
-        creation_fichier(alphabet, nom_fichier, argv[2]);
+        strcpy(nom_fichier, argv[3]);
+        strcat(nom_fichier, "/");
+        strcat(nom_fichier, fichier);
     }
+    strcpy(nom_fichier, change_nom_fichier(nom_fichier));
+    printf("Nom du fichier: %s\n", nom_fichier);
+    creation_fichier(alphabet, nom_fichier, argv[2]);
     return 1;
 }
 
