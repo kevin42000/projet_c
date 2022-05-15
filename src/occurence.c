@@ -34,6 +34,6 @@ void occurence(FILE *fic, int tab[MAX_CHAR]){
     if(feof(fic)){
       break;
     }
-    tab[caractere]++;
+    tab[(unsigned int)caractere]++;
   }
 }

@@ -21,9 +21,8 @@ void afficher_octet(char b){
 }
 void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     int i = 0, j, k = 0,m,x;
-    unsigned long int tot = 0;
     unsigned char bit;
-    char nb[11], nb_bits[11], caractere, tete[45] = {0};
+    char caractere;
     FILE *p, *origine;
     file f = file_vide(); /* pour stocker les bits */
     i=0;
@@ -33,14 +32,11 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
     }
     origine = fopen(fichier_original, "r");
     fseek(origine, 0L, SEEK_END);
-    tot = ftell(origine);
-    p = fopen(fichier, "w");
-    fprintf(p,"");
-    fclose(p);
+    fclose(fopen(fichier, "w"));/* on crée ou on efface le fichier */
     p = fopen(fichier, "a");
     i = 0;
     while(alphabet[i] != NULL){
-        fprintf(p,"%c %ld;;",alphabet[i]->caractere,alphabet[i]->occurence);
+        fprintf(p,"%c %d;;",alphabet[i]->caractere,alphabet[i]->occurence);
         i++;
     }
     fputc('\0', p);
@@ -102,8 +98,8 @@ void creer_fichier(char *fichier, char *fichier_original, noeud *alphabet[]){
 }
 
 void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
-    int i = 0, j,taille = 0;
-    char nb_bits[3],c;
+    int i = 0,taille = 0;
+    char c;
     int tab[MAX_CHAR],nbr;
     char code[MAX_PROF] = {0};
     noeud *tmp[MAX_CHAR];
@@ -113,7 +109,7 @@ void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
         tab[i] = 0;
     }
     while(fscanf(p,"%c %d;;",&c,&nbr) == 2){
-        tab[c] = nbr;
+        tab[(unsigned int)c] = nbr;
     }
     fclose(p);
     for(i=0;i<MAX_CHAR;i++){
@@ -139,8 +135,8 @@ void decompression(noeud *alphabet[MAX_CHAR], char *fichier){
 }
 
 void print_r(unsigned int seq[MAX_PROF]){
-    int i =0;
-    while(seq[i] != -1){
+    unsigned int i =0;
+    while(seq[i] != (unsigned int)-1){/* peut causer des bugs si les fichiers sont trop volumineux */
         printf("%d",seq[i]);
         i++;
     }
@@ -148,21 +144,20 @@ void print_r(unsigned int seq[MAX_PROF]){
 }
 
 int get_char(noeud *alphabet[MAX_CHAR],unsigned int seq[MAX_PROF]){
-    int i,j,state = 1,count = 0,len;
-    for(len = 0;seq[len] != -1;len++);
+    int i,j,state = 1,len;
+    for(len = 0;seq[len] != (unsigned int)-1;len++);
     for(i=0;i<MAX_CHAR;i++){
         state = 1;
         if(alphabet[i] == NULL)return -1;/* On est arrivé à la fin */
         if(alphabet[i]->nb_bits != len){
             continue;
         }
-        count = 0;
         for(j=0;j<alphabet[i]->nb_bits;j++){
-            if(seq[j] == -1){
+            if(seq[j] == (unsigned int)-1){
                 state = 0;
                 break;
             }
-            if(alphabet[i]->codage[j] == seq[j]+'0'){
+            if((unsigned int)alphabet[i]->codage[j] == seq[j]+(unsigned int)'0'){
             }else{
                 state = 0;
                 break;
@@ -176,23 +171,20 @@ int get_char(noeud *alphabet[MAX_CHAR],unsigned int seq[MAX_PROF]){
 }
 
 void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_compresse){
-    FILE *comp,*dest;
-    int ignore = 0;
+    FILE *dest;
     float percent = 0;
     char c;
     char progress[13];
     unsigned long int size =0,max_size=0;
     unsigned int seq[MAX_PROF] = {-1};
-    unsigned int t;
-    char decimal[4];
-    int i = 0, j, nb;
-    char nb_bits[3], taille_arbre[11] = {0};
+    int t;
+    int i = 0, j;
     FILE *p;
     file f = file_vide();
     p = fopen(fichier_compresse, "rb");
     dest = fopen(fichier,"w");
     fseek(p,0,SEEK_SET);
-    while(fscanf(p,"%c %ld;;",&c,&t) == 2){
+    while(fscanf(p,"%c %d;;",&c,&t) == 2){
         size += t;
     }
     max_size = size;
@@ -213,7 +205,7 @@ void creation_fichier(noeud *alphabet[MAX_CHAR], char *fichier, char *fichier_co
         while(!est_file_vide(f)){
             t = debut_file(f);
             f= defiler(f);
-            for(j=0;seq[j] != -1;j++);
+            for(j=0;seq[j] != (unsigned int)-1;j++);
             seq[j] = t;
             seq[j+1] = -1;
             c=get_char(alphabet,seq);

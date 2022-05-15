@@ -50,7 +50,7 @@ void parcours_tableau(noeud *arbre_huffman[MAX_CHAR], int taille, int *x, int *y
 }
 
 void creer_noeud(noeud *tab[], int taille){
-    int i, m = 0, n = 0, j;
+    int i, m = 0, n = 0;
     int *x = &m, *y = &n;
     noeud *arbre_huffman;
     for(i=0;i<taille-1;i++){
