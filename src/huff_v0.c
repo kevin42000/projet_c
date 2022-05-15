@@ -14,7 +14,7 @@
 int main_compression(int argc, char *argv[]){
     int i, taille = 0, existe = 0;
     int tab[MAX_CHAR] = {0};
-    char code[MAX_PROF] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
+    char code[MAX_PROF] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *arbre_huffman[MAX_CHAR] = {0}, *alphabet[MAX_CHAR] = {0};
     FILE *fichier;
     if(argc !=4){
@@ -22,12 +22,11 @@ int main_compression(int argc, char *argv[]){
         return 0;
     }
     if(access(argv[2], F_OK)==0){
-        printf("<archive_finale> existe déjà.\n");
+        printf("%s existe déjà.\n", argv[2]);
         existe = 1;
-        strcpy(nom_fichier, argv[2]);
     }
     if(access(argv[3], F_OK)!=0){
-        printf("<fichier_à_compresser> n'existe pas.\n");
+        printf("%s n'existe pas.\n", argv[3]);
         return 0;
     }
     fichier = fopen(argv[3], "r");
@@ -44,21 +43,11 @@ int main_compression(int argc, char *argv[]){
     code[0] = '0';
     code[1] = '\0';
     creer_code(arbre_huffman[0], alphabet, code, 1);
-    if(existe == 0){
-        creer_fichier(argv[2], argv[3], alphabet);
-    }else{
-        while(access(nom_fichier, F_OK)==0 && existe < INT_MAX){
-            sprintf(ajout_nom,"%d",existe);
-            strcpy(nom_fichier, argv[2]);
-            strcat(nom_fichier, ajout_nom);
-            existe++;
-        }
-        if(existe == INT_MAX){
-            printf("Impossible de créer l'archive.\n");
-            return 0;
-        }
-        creer_fichier(nom_fichier, argv[3], alphabet);
+    strcpy(nom_fichier, change_nom_fichier(argv[2]));
+    if(existe == 1){
+        printf("Nouveau nom de l'archive: %s\n", nom_fichier);
     }
+    creer_fichier(nom_fichier, argv[3], alphabet);
     for(i=0;i<MAX_CHAR;i++){
         free(alphabet[i]);
     }
@@ -66,11 +55,10 @@ int main_compression(int argc, char *argv[]){
 }
 
 int main_decompression(int argc, char *argv[]){/* verifications pre-decompression */
-    int arg = 0;
-    char *p = NULL, fichier[MAX_CHAR] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
+    char *p = NULL, fichier[MAX_CHAR] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *alphabet[MAX_CHAR] = {0};
     DIR *repertoire;
-    struct dirent *liste;
+    
     if(argc !=3 && argc !=4){
         printf("Veuillez entrer les arguments au format -d archive_a_décompresser dossier_cible.\n");
         return 0;
@@ -79,68 +67,32 @@ int main_decompression(int argc, char *argv[]){/* verifications pre-decompressio
         printf("%s n'existe pas.\n",argv[2]);/* je pense que c'est mieux de donner le chemin plutôt que la variable du manuelle */
         return 0;
     }
+    decompression(alphabet, argv[2]);
+    strcpy(nom_fichier, argv[2]);
+    if((p=strrchr(nom_fichier, '.')) && p != NULL && strstr(p, ".huf")){
+        strcpy(p, "\0");
+    }
     if(argc == 4){
         if((repertoire = opendir(argv[3])) == NULL){
             printf("Création de %s.\n", argv[3]);
-            arg = 1;
-        }
-        closedir(repertoire);
-    }
-    decompression(alphabet, argv[2]);
-    strcpy(fichier, argv[2]);
-    if((p=strrchr(fichier, '.')) && p != NULL && strstr(p, ".huf")){
-        strcpy(p, "\0");
-    }
-    if(argc == 3){
-        strcpy(nom_fichier, fichier);
-        while(access(nom_fichier, F_OK)==0 && arg < INT_MAX){
-            sprintf(ajout_nom,"%d",arg);
-            strcpy(nom_fichier, fichier);
-            strcat(nom_fichier, ajout_nom);
-            arg++;
-        }
-        if(arg == INT_MAX){
-            printf("Impossible de créer le fichier.\n");
-            return 0;
-        }
-        creation_fichier(alphabet, nom_fichier, argv[2]);
-    }else{
-        if(arg == 1){
+            if(access(argv[3], F_OK)==0){
+                printf("Impossible de créer le répertoire car un fichier porte déjà le même nom que le répertoire à créer.\n");
+                return 0;
+            }
             if(mkdir(argv[3], S_IRWXU|S_IRGRP|S_IXGRP) != 0 && access(argv[3], F_OK)!=0){
                 printf("Impossible de créer le répertoire.\n");
                 return 0;
             }
-            repertoire = opendir("./");
-            if(repertoire == NULL){
-                puts("Erreur de lecture du dossier actuel");
-            }
-            while((liste = readdir(repertoire))){
-                if(strcmp(liste->d_name, argv[3])==0){
-                    printf("Impossible de créer le répertoire car il y a un fichier portant le même nom.\n");
-                    return 0;
-                }
-            }
-            closedir(repertoire);
         }
-        arg = 1;
-        strcat(nom_fichier, argv[3]);
-        if(nom_fichier[strlen(nom_fichier)] != '/'){
-            strcat(nom_fichier, "/");
-        }
-        strcat(nom_fichier, fichier);
+        closedir(repertoire);
         strcpy(fichier, nom_fichier);
-        while(access(nom_fichier, F_OK)==0 && arg < INT_MAX){
-            sprintf(ajout_nom,"%d",arg);
-            strcpy(nom_fichier, fichier);
-            strcat(nom_fichier, ajout_nom);
-            arg++;
-        }
-        if(arg == INT_MAX){
-            printf("Impossible de créer le fichier.\n");
-            return 0;
-        }
-        creation_fichier(alphabet, nom_fichier, argv[2]);
+        strcpy(nom_fichier, argv[3]);
+        strcat(nom_fichier, "/");
+        strcat(nom_fichier, fichier);
     }
+    strcpy(nom_fichier, change_nom_fichier(nom_fichier));
+    printf("Nom du fichier: %s\n", nom_fichier);
+    creation_fichier(alphabet, nom_fichier, argv[2]);
     return 1;
 }
 
