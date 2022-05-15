@@ -14,7 +14,7 @@
 char * change_nom_fichier(char ancien_nom[MAX_CHAR]){
     int i = 0;
     char *nouveau_nom, c[11] = {0};
-    nouveau_nom = (char*)calloc(MAX_CHAR, sizeof(char));
+    nouveau_nom = (char*)malloc(MAX_CHAR * sizeof(char));
     if(nouveau_nom == NULL){
         printf("Erreur allocation mémoire.");
         return NULL;
@@ -41,13 +41,14 @@ char ** creer_liste(int taille){
         printf("Erreur allocation mémoire.");
         return NULL;
     }
-    for(i=0;i<taille;i++){
+    for(i=0;i<=taille;i++){
         liste[i] = (char*)calloc(MAX_CHAR, sizeof(char));
         if(liste[i] == NULL){
             printf("Erreur allocation mémoire.");
             return NULL;
         }
     }
+    liste[taille] = NULL;
     return liste;
 }
 
@@ -93,16 +94,16 @@ char ** liste_fichier_tmp(char chemin[MAX_CHEMIN], char **liste){
         j++;
     }
     liste_tmp = creer_liste(j-i);
-    for(k=0;k<i;k++){
+    for(k=0;k<j;k++){
         m = 0;
-        for(l=0;l<j;l++){
-            if(strcmp(liste[k], liste_fichier[l]) == 0){
+        for(l=0;l<i;l++){
+            if(strcmp(liste[l], liste_fichier[k]) == 0){
                 m = 1;
                 break;
             }
         }
         if(m == 0){
-            strcpy(liste_tmp[n], liste[k]);
+            strcpy(liste_tmp[n], liste_fichier[k]);
             n++;
         }
     }
