@@ -7,7 +7,7 @@ sources= ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.
 objets= $(sources:.c=.o)
 
 
-clean : huff_v0 huff_v1 huff_v2 huff_v3 huff_v4
+clean : huff_v5 huff_v0 huff_v1 huff_v2 huff_v3 huff_v4
 	rm -r ./src/*.o
 
 huff_v0: ./src/huff_v0.c $(objets)

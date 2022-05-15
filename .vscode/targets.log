@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 15 09:50:47 2022
+# Make data base, printed on Sun May 15 21:33:40 2022
 
 # Variables
 
@@ -231,7 +231,7 @@ MAKEFILES :=
 # environment
 SNAP_COOKIE = 9h8izJrNZV_KYjXktiK5jdwYgodGEz-fIawCz3biyTGwJKjmJgMs
 # makefile (from 'Makefile', line 5)
-sources = ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c
+sources = ./src/file.c ./src/mon_erreur.c ./src/liste.c ./src/pile.c ./src/arbre.c ./src/compression.c ./src/occurence.c ./src/fonction_huff.c
 # automatic
 <F = $(notdir $<)
 # environment
@@ -261,7 +261,7 @@ LANG = C
 # environment
 VSCODE_PID = 3175
 # variable set hash-table stats:
-# Load=124/1024=12%, Rehash=0, Collisions=28/157=18%
+# Load=124/1024=12%, Rehash=0, Collisions=30/159=19%
 
 # Pattern-specific Variable Values
 
@@ -269,28 +269,27 @@ VSCODE_PID = 3175
 
 # Directories
 
-# . (device 66306, inode 6820432): 46 files, no impossibilities.
+# . (device 66306, inode 6820432): 23 files, no impossibilities.
 
-# 46 files, no impossibilities in 1 directories.
+# 23 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 %.o: %.c
-#  recipe to execute (from 'Makefile', line 26):
+#  recipe to execute (from 'Makefile', line 29):
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
 # 1 implicit rules, 0 (0.0%) terminal.
 
 # Files
 
-huff_v0: src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v0: src/huff_v0.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o src/fonction_huff.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
 	$(CC) $(CFLAGS) -o $@  $^
 
- 
 # Not a target:
 all:
 #  Command line target.
@@ -304,7 +303,7 @@ src/compression.o:
 #  Modification time never checked.
 #  File has not been updated.
 
-huff_v1: src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v1: src/huff_v1.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o src/fonction_huff.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -318,9 +317,15 @@ src/occurence.o:
 #  File has not been updated.
 
 # Not a target:
+src/huff_v4.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-14 18:39:36.646445482
+#  Last modified 2022-05-15 21:28:38.018608601
 #  File has been updated.
 #  Successfully updated.
 
@@ -336,7 +341,7 @@ src/huff_v3.c:
 #  Modification time never checked.
 #  File has not been updated.
 
-huff_v2: src/huff_v2.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v2: src/huff_v2.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o src/fonction_huff.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -345,6 +350,12 @@ huff_v2: src/huff_v2.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/ar
 
 # Not a target:
 src/mon_erreur.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/fonction_huff.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -362,12 +373,18 @@ src/huff_v0.c:
 #  File has not been updated.
 
 # Not a target:
+huff_v5:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 src/huff_v1.c:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-clean: huff_v0 huff_v1 huff_v2 huff_v3
+clean: huff_v5 huff_v0 huff_v1 huff_v2 huff_v3 huff_v4
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -386,11 +403,19 @@ src/file.o:
 #  Modification time never checked.
 #  File has not been updated.
 
-huff_v3: src/huff_v3.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o
+huff_v4: src/huff_v4.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o src/fonction_huff.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 26):
+	$(CC) $(CFLAGS) -o $@  $^
+
+huff_v3: src/huff_v3.c src/file.o src/mon_erreur.o src/liste.o src/pile.o src/arbre.o src/compression.o src/occurence.o src/fonction_huff.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 23):
+ 
 	$(CC) $(CFLAGS) -o $@  $^
 
 # Not a target:
@@ -406,19 +431,19 @@ src/huff_v2.c:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=20/1024=2%, Rehash=0, Collisions=0/70=0%
+# Load=24/1024=2%, Rehash=0, Collisions=0/90=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 65 / storage = 524 B / avg = 8 B
-# current buf: size = 8162 B / used = 524 B / count = 65 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 44 / storage = 413 B / avg = 9 B
+# current buf: size = 8162 B / used = 413 B / count = 44 / avg = 9 B
 
-# strcache performance: lookups = 103 / hit rate = 36%
+# strcache performance: lookups = 97 / hit rate = 54%
 # hash-table stats:
-# Load=65/8192=1%, Rehash=0, Collisions=1/103=1%
-# Finished Make data base on Sun May 15 09:50:47 2022
+# Load=44/8192=1%, Rehash=0, Collisions=1/97=1%
+# Finished Make data base on Sun May 15 21:33:40 2022
 
  
