@@ -4,7 +4,6 @@
 #include <limits.h>
 #include "../inc/arbre.h"
 
-/*crée une structure noeud pour un caractère contenu dans le fichier*/
 noeud * creer_feuille(int *tab, int index){
     noeud *arbre_huffman;
     if(tab[index] == 0){
@@ -24,7 +23,6 @@ noeud * creer_feuille(int *tab, int index){
     return arbre_huffman;
 }
 
-/*récupère les 2 plus faibles occurences*/
 void parcours_tableau(noeud *arbre_huffman[MAX_CHAR], int taille, int *x, int *y){
     int i = 0, j = 0, k = 0;
     int x1 = INT_MAX, x2 = INT_MAX;
@@ -51,7 +49,6 @@ void parcours_tableau(noeud *arbre_huffman[MAX_CHAR], int taille, int *x, int *y
     }
 }
 
-/*crée une structure noeud pour chaque caractère contenu dans le fichier*/
 void creer_noeud(noeud *tab[], int taille){
     int i, m = 0, n = 0, j;
     int *x = &m, *y = &n;
@@ -60,11 +57,11 @@ void creer_noeud(noeud *tab[], int taille){
         arbre_huffman = (noeud*)malloc(sizeof(noeud));
         if(arbre_huffman == NULL){
             printf("Erreur allocation mémoire.\n");
-            return;
+            exit(-1);
         }
-        parcours_tableau(tab, taille, x, y);
+        parcours_tableau(tab, taille, x, y);/* On récupère les deux plus faibles occurrences */
         arbre_huffman->caractere = '\0';
-        arbre_huffman->occurence = tab[*x]->occurence + tab[*y]->occurence;
+        arbre_huffman->occurence = tab[*x]->occurence + tab[*y]->occurence; /* on les additionnes pour obtenir le poids du noeud */
         arbre_huffman->codage[0] = '\0';
         arbre_huffman->nb_bits = 0;
         arbre_huffman->gauche = tab[*x];
@@ -78,7 +75,6 @@ void creer_noeud(noeud *tab[], int taille){
     }
 }
 
-/*retourne vrai si noeud_courant est une feuille*/
 int est_feuille(noeud *noeud_courant){
     if(noeud_courant->caractere != '\0'){
         return 1;

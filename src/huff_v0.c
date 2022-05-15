@@ -64,7 +64,7 @@ int main_compression(int argc, char *argv[]){
     return 1;
 }
 
-int main_decompression(int argc, char *argv[]){
+int main_decompression(int argc, char *argv[]){/* verifications pre-decompression */
     int arg = 0;
     char *p = NULL, fichier[MAX_CHAR] = {0}, ajout_nom[4] = {0}, nom_fichier[MAX_CHAR] = {0};
     noeud *alphabet[MAX_CHAR] = {0};
@@ -75,12 +75,12 @@ int main_decompression(int argc, char *argv[]){
         return 0;
     }
     if(access(argv[2], F_OK)!=0){
-        printf("<archive_à_décompresser> n'existe pas.\n");
+        printf("%s n'existe pas.\n",argv[2]);/* je pense que c'est mieux de donner le chemin plutôt que la variable du manuelle */
         return 0;
     }
     if(argc == 4){
         if((repertoire = opendir(argv[3])) == NULL){
-            printf("Création de <dossier_cible>=%s.\n", argv[3]);
+            printf("Création de %s.\n", argv[3]);
             arg = 1;
         }
         closedir(repertoire);
@@ -110,6 +110,9 @@ int main_decompression(int argc, char *argv[]){
                 return 0;
             }
             repertoire = opendir("./");
+            if(repertoire == NULL){
+                puts("Erreur de lecture du dossier actuel");
+            }
             while((liste = readdir(repertoire))){
                 if(strcmp(liste->d_name, argv[3])==0){
                     printf("Impossible de créer le répertoire car il y a un fichier portant le même nom.\n");
