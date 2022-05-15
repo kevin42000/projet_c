@@ -2,6 +2,7 @@
 #define DEF_ARBRE
 #define MAX_CHAR 257
 #define MAX_PROF 33
+#define MAX_CHEMIN 4097
 
 typedef struct noeud{
   char caractere;
