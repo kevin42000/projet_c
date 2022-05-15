@@ -9,6 +9,7 @@
 #include "../inc/occurence.h"
 #include "../inc/arbre.h"
 #include "../inc/compression.h"
+#include "../inc/fonction_huff.h"
 
 int main_compression(int argc, char *argv[]){
     int i, j, k, taille = 0, existe = 0, m = 1, n = 0, o, p;
